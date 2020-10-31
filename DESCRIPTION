@@ -1,7 +1,7 @@
 Package: suppdata
 Type: Package
 Title: Downloading Supplementary Data from Published Manuscripts
-Version: 1.1-4
+Version: 1.1-5
 Authors@R: c(person("William D.", "Pearse", email = "will.pearse@gmail.com", role = c("aut", "cre"), comment=c(ORCID="0000-0002-6241-3164")),
     person("Scott", "Chamberlain", role = "aut", comment=c(ORCID="0000-0003-1444-9135")),
     person("Daniel", "Nuest", role = "aut", comment=c(ORCID="0000-0002-0024-5046")),
@@ -30,7 +30,7 @@ Imports: httr (>= 1.0.0), xml2 (>= 1.2.0), jsonlite (>= 1.5), rcrossref
 Encoding: UTF-8
 RoxygenNote: 7.1.1
 NeedsCompilation: no
-Packaged: 2020-10-05 12:41:47 UTC; will
+Packaged: 2020-10-31 14:18:16 UTC; will
 Author: William D. Pearse [aut, cre] (<https://orcid.org/0000-0002-6241-3164>),
   Scott Chamberlain [aut] (<https://orcid.org/0000-0003-1444-9135>),
   Daniel Nuest [aut] (<https://orcid.org/0000-0002-0024-5046>),
@@ -39,4 +39,4 @@ Author: William D. Pearse [aut, cre] (<https://orcid.org/0000-0002-6241-3164>),
   Sarah Supp [rev] (Sarah Supp reviewed the package for rOpenSci, see
     https://github.com/ropensci/onboarding/issues/195)
 Repository: CRAN
-Date/Publication: 2020-10-06 12:00:03 UTC
+Date/Publication: 2020-10-31 14:50:02 UTC

@@ -45,6 +45,10 @@
 #'     using EPMC (see details)
 #' @param timeout how long to wait for successful download (default 10
 #'     seconds)
+#' @param zip if \code{TRUE}, force download in binary format in order
+#'     to ensure that zipped files will work on Windows (default
+#'     FALSE).
+
 #' @author Will Pearse (\email{will.pearse@usu.edu}) and Scott
 #'     Chamberlain (\email{myrmecocystus@gmail.com})
 #' @note Make sure that the article from which you're attempting to
@@ -52,23 +56,19 @@
 #'     materials. 404 errors and 'file not found' errors can result
 #'     from such cases.
 #' @examples
-#' \donttest{
+#' # NOTE: The examples below are flagged as 'dontrun' to avoid
+#' # running downloads repeatedly on CRAN servers
+#' \dontrun{
 #' #Put the function wherever you would put a file path
 #' crabs <- read.csv(suppdata("10.6084/m9.figshare.979288", 2))
 #'
-#' #ESA data papers and regular articles *must* be marked
-#' fungi <- read.csv(suppdata("E093-059", "myco_db.csv",
-#'                                         "esa_archives"))
-#' mammals <- read.csv(suppdata("E092-201", "MCDB_communities.csv",
-#'                                             "esa_data_archives"))
-#' #View the suffix (file extension) of downloaded files
-#' # - note that not all files are uploaded/stored with useful file extensions!
-#' suppdata("E093-059","myco_db.csv","esa_archives")
-#' attr( suppdata("E093-059","myco_db.csv","esa_archives"), "suffix")
-#' 
 #' epmc.fig <- suppdata("10.1371/journal.pone.0126524",
 #'                        "pone.0126524.s002.jpg", "epmc")
 #' #...note this 'SI' is not actually an SI, but rather an image from the paper.
+#'
+#' #View the suffix (file extension) of downloaded files
+#' # - note that not all files are uploaded/stored with useful file extensions!
+#' attr(epmc.fig, "suffix")
 #' 
 #' copernicus.csv <- suppdata("10.5194/bg-14-1739-2017",
 #'                            "Table S1 v2 UFK FOR_PUBLICATION.csv",
@@ -85,7 +85,7 @@ suppdata <- function(x, si,
                             "biorxiv","epmc", "peerj", "copernicus",
                             "jstatsoft"),
                      save.name=NA, dir=NA, cache=TRUE, vol=NA, issue=NA,
-                     list=FALSE, timeout=10)
+                     list=FALSE, timeout=10, zip=FALSE)
     UseMethod("suppdata")
 #' @export
 #' @rdname suppdata
@@ -96,7 +96,7 @@ suppdata.character <- function(x, si,
                                       "biorxiv","epmc","peerj", "copernicus",
                                       "jstatsoft"),
                                save.name=NA, dir=NA, cache=TRUE,
-                               vol=NA, issue=NA, list=FALSE, timeout=10){
+                               vol=NA, issue=NA, list=FALSE, timeout=10, zip=FALSE){
     #Basic argument handling
     if(length(x) == 0)
         stop("'x' must contain some data!")
@@ -122,7 +122,7 @@ suppdata.character <- function(x, si,
         return(setNames(unlist(
             mapply(suppdata.character, x=x,si=si,from=from,save.name=save.name,
                    dir=dir,cache=cache,vol=vol,issue=issue,list=list,
-                   timeout=timeout))
+                   timeout=timeout, zip=zip))
            ,x))
     ############################
     #...Do work
@@ -142,13 +142,13 @@ suppdata.character <- function(x, si,
         from <- .suppdata.pub(x)
     func <- .suppdata.func(from)
     return(func(x, si, save.name=save.name, dir=dir, cache=cache,
-                vol=vol, issue=issue, list=list, timeout=timeout))
+                vol=vol, issue=issue, list=list, timeout=timeout, zip=zip))
 }
 #' @export
 #' @rdname suppdata
 suppdata.ft_data <- function(x, si, from=c("auto"), save.name=NA, dir=NA,
                              cache=TRUE, vol=NA, issue=NA, list=FALSE,
-                             timeout=10){
+                             timeout=10, zip=FALSE){
     from <- match.arg(from)
     if(from != "auto") # probably never gets here because of match.arg
         stop("Must use 'auto' for 'from' argument with 'ft_data' input")
@@ -166,7 +166,7 @@ suppdata.ft_data <- function(x, si, from=c("auto"), save.name=NA, dir=NA,
 #' @export
 #' @rdname suppdata
 suppdata.ft <- function(x, si, from=c("auto"), save.name=NA, dir=NA, cache=TRUE,
-                        vol=NA, issue=NA, list=FALSE, timeout=10){
+                        vol=NA, issue=NA, list=FALSE, timeout=10, zip=FALSE){
     from <- match.arg(from)
     if(from != "auto")
         stop("Must use 'auto' for 'from' argument with 'ft' input")
@@ -177,5 +177,5 @@ suppdata.ft <- function(x, si, from=c("auto"), save.name=NA, dir=NA, cache=TRUE,
         stop("No DOI found in fulltext search")
     return(suppdata.character(x=x,si=si,from=from,save.name=save.name,
                dir=dir,cache=cache,vol=vol,issue=issue,list=list,
-               timeout=timeout))
+               timeout=timeout, zip=FALSE))
 }
